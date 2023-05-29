@@ -12,9 +12,9 @@ int main() {
   inimigo *headI = NULL;
 
   // Declaração dos personagens
-  inserirH(&head, 100, 55, 100, "Guerreiro Infernal");
-  inserirH(&head, 80, 32, 140, "Mago de Gelo");
-  inserirH(&head, 90, 40, 120, "Arqueira florestal");
+  inserirH(&head, 140, 55, 100, "Guerreiro Infernal");
+  inserirH(&head, 100000, 1000000, 160, "Mago de Gelo");
+  inserirH(&head, 110, 40, 114, "Arqueira florestal");
 
   // Declaração dos inimigos
   inserirI(&headI, 140, 4, 15, 1, "Lamina das Sombras");
@@ -47,13 +47,13 @@ int main() {
 
     switch (escolha) {
     case 1:
-      personagemAtual = escolherPersonagem(1);
+      personagemAtual = escolherPersonagem(1, head);
       break;
     case 2:
-      personagemAtual = escolherPersonagem(2);
+      personagemAtual = escolherPersonagem(2, head);
       break;
     case 3:
-      personagemAtual = escolherPersonagem(3);
+      personagemAtual = escolherPersonagem(3, head);
       break;
     case 0:
       printf("Encerrando o jogo.\n");
@@ -66,10 +66,10 @@ int main() {
   } while (aux);
   printf("\nPersonagem escolhido: %s\n", personagemAtual->nome);
 
-  int inimigosBatalhados[MAX_INIMIGOS];
+  inimigo * inimigosBatalhados[MAX_INIMIGOS] = {};
   int numInimigosBatalhados = 0;
 
-  while (personagemAtual->hp > 0) {
+  do {
     printf("\nOpções de ação:\n");
     printf("1. Atacar\n");
     printf("2. Atacar com poder mágico\n");
@@ -81,31 +81,27 @@ int main() {
     case 1: {
       if (personagemAtual->hp > 0) {
         int confirmacao;
-        printf("Você escolheu atacar. Confirme a ação (1 para confirmar, 0 "
+        printf("\nVocê escolheu atacar. Confirme a ação (1 para confirmar, 0 "
                "para cancelar): ");
         scanf("%d", &confirmacao);
         if (confirmacao == 1) {
           ataque(personagemAtual, inimigoAtual);
           if (inimigoAtual->hp <= 0) {
-            inimigosBatalhados[numInimigosBatalhados] = inimigoAtual->id;
+            inimigosBatalhados[numInimigosBatalhados] = inimigoAtual;
             numInimigosBatalhados++;
             removerI(&headI, inimigoAtual->id);
-            free(inimigoAtual);
             inimigoAtual = escolherInimigoAleatorio(headI);
             if (headI == NULL) {
               printf("\nTodos os inimigos foram derrotados!\n");
               break;
             }
           }
-          printf("\nPersonagem: %s (HP: %d)\n", personagemAtual->nome,
+          printf("\nPersonagem: %s |HP: %d\n", personagemAtual->nome,
                  personagemAtual->hp);
-          printf("Inimigo: %s (HP: %d)\n", inimigoAtual->nome,
-                 inimigoAtual->hp);
+          printf("Inimigo: %s |HP: %d\n", inimigoAtual->nome, inimigoAtual->hp);
         } else {
           printf("Ação cancelada.\n");
         }
-      } else {
-        printf("\nO personagem não pode atacar. Sua vida atual é 0.\n");
       }
       break;
     }
@@ -118,26 +114,23 @@ int main() {
         if (confirmacao == 1) {
           ataqueMagico(personagemAtual, inimigoAtual);
           if (inimigoAtual->hp <= 0) {
-            inimigosBatalhados[numInimigosBatalhados] = inimigoAtual->id;
+            inimigosBatalhados[numInimigosBatalhados] = inimigoAtual;
             numInimigosBatalhados++;
             removerI(&headI, inimigoAtual->id);
-            free(inimigoAtual);
-            inimigoAtual = escolherInimigoAleatorio(headI);
+            if (headI != NULL) {
+              inimigoAtual = escolherInimigoAleatorio(headI);
+            }
             if (headI == NULL) {
               printf("\nTodos os inimigos foram derrotados!\n");
               break;
             }
           }
-          printf("\nPersonagem: %s (HP: %d)\n", personagemAtual->nome,
+          printf("\nPersonagem: %s |HP: %d\n", personagemAtual->nome,
                  personagemAtual->hp);
-          printf("Inimigo: %s (HP: %d)\n", inimigoAtual->nome,
-                 inimigoAtual->hp);
+          printf("Inimigo: %s |HP: %d\n", inimigoAtual->nome, inimigoAtual->hp);
         } else {
           printf("Ação cancelada.\n");
         }
-      } else {
-        printf("\nO personagem não pode atacar com poder mágico. Sua vida "
-               "atual é 0.\n");
       }
       break;
     }
@@ -156,8 +149,6 @@ int main() {
         } else {
           printf("Ação cancelada.\n");
         }
-      } else {
-        printf("\nO personagem não pode defender. Sua vida atual é 0.\n");
       }
       break;
     }
@@ -165,18 +156,19 @@ int main() {
       printf("\nOpção inválida. Tente novamente.\n");
       break;
     }
-  }
+  } while (personagemAtual->hp > 0 && headI != NULL);
 
   if (personagemAtual->hp <= 0) {
-    printf("\nO personagem foi derrotado. Fim de jogo.\n");
+    printf("\nVocê foi derrotado. Fim de jogo.\n");
+    free(personagemAtual);
   } else {
     printf("\nParabéns! Você derrotou todos os inimigos. Fim de jogo.\n");
   }
 
-  printf("\nLista de inimigos batalhados:\n");
+  printf("\nLista de inimigos vencidos:\n");
   for (int i = 0; i < numInimigosBatalhados; i++) {
-    inimigo *inimigoBatalhado = buscarI(headI, inimigosBatalhados[i]);
-    printf("%d. %s\n", i + 1, inimigoBatalhado->nome);
+    inimigo *inimigoPrint = inimigosBatalhados[i];
+    printf("%d. %s\n", i + 1, inimigoPrint->nome);
   }
 
   liberarMemoriaH(head);

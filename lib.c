@@ -47,7 +47,7 @@ void inserirI(inimigo **headI, int hp, int ataque, int pm, int id,
 void imprimirH(personagem *head) {
   personagem *temp = head;
   while (temp != NULL) {
-    printf("Personagem: %s (HP: %d, Ataque: %d, Poder Mágico: %d)\n",
+    printf("Personagem: %s\n |HP: %d\n |Ataque: %d\n |Poder Mágico: %d\n\n",
            temp->nome, temp->hp, temp->ataque, temp->pm);
     temp = temp->prox;
   }
@@ -79,15 +79,15 @@ void ataque(personagem *personagemAtual, inimigo *inimigoAtual) {
   int dano = personagemAtual->ataque;
 
   printf("Você atacou o inimigo %s!\n", inimigoAtual->nome);
-  printf("Dano causado: %d\n", dano);
+  printf("\n|Dano causado: %d\n", dano);
   personagemAtual->hp -= danoI;
   inimigoAtual->hp -= dano; // Reduz a vida do inimigo pelo valor do dano
 
-  printf("Vida restante do inimigo %s: %d\n", inimigoAtual->nome,
+  printf("|Vida restante do inimigo %s: %d\n", inimigoAtual->nome,
          inimigoAtual->hp);
 
-  printf("Dano recebido por %s foi: %d\n", inimigoAtual->nome, danoI);
-  printf("Sua vida restante:%d\n", personagemAtual->hp);
+  printf("|Dano recebido por %s foi: %d\n", inimigoAtual->nome, danoI);
+  printf("|Sua vida restante:%d\n", personagemAtual->hp);
 }
 void ataqueMagico(personagem *personagemAtual, inimigo *inimigoAtual) {
   if (inimigoAtual == NULL) {
@@ -105,16 +105,16 @@ void ataqueMagico(personagem *personagemAtual, inimigo *inimigoAtual) {
   // Lógica de ataque
   int dano = personagemAtual->pm;
 
-  printf("Você atacou o inimigo %s!\n", inimigoAtual->nome);
-  printf("Dano causado: %d\n", dano);
+  printf("\nVocê atacou o inimigo %s!\n", inimigoAtual->nome);
+  printf("|Dano causado: %d\n", dano);
 
   inimigoAtual->hp -= dano;
   personagemAtual->hp -= danoI;
 
-  printf("Vida restante do inimigo %s: %d\n", inimigoAtual->nome,
+  printf("|Vida restante do inimigo %s: %d\n", inimigoAtual->nome,
          inimigoAtual->hp);
-  printf("Dano recebido por %s foi: %d\n", inimigoAtual->nome, danoI);
-  printf("Sua vida restante: %d\n", personagemAtual->hp);
+  printf("|Dano recebido por %s foi: %d\n", inimigoAtual->nome, danoI);
+  printf("|Sua vida restante: %d\n", personagemAtual->hp);
 }
 
 void defesa(personagem *personagemAtual, inimigo *inimigoAtual) {
@@ -189,31 +189,31 @@ void removerI(inimigo **headI, int id) {
   free(tempI);
 }
 
-personagem *escolherPersonagem(int escolha) {
+personagem *escolherPersonagem(int escolha, personagem *head) {
   personagem *personagemAtual = NULL;
   switch (escolha) {
   case 1:
     personagemAtual = (personagem *)malloc(sizeof(personagem));
-    strcpy(personagemAtual->nome, "Personagem 1");
-    personagemAtual->hp = 100;
-    personagemAtual->ataque = 20;
-    personagemAtual->pm = 30;
+    strcpy(personagemAtual->nome, head->nome);
+    personagemAtual->hp = head->hp;
+    personagemAtual->ataque = head->hp;
+    personagemAtual->pm = head->hp;
     personagemAtual->prox = NULL;
     break;
   case 2:
     personagemAtual = (personagem *)malloc(sizeof(personagem));
-    strcpy(personagemAtual->nome, "Personagem 2");
-    personagemAtual->hp = 150;
-    personagemAtual->ataque = 15;
-    personagemAtual->pm = 50;
+    strcpy(personagemAtual->nome, head->prox->nome);
+    personagemAtual->hp = head->prox->hp;
+    personagemAtual->ataque = head->prox->ataque;
+    personagemAtual->pm = head->prox->pm;
     personagemAtual->prox = NULL;
     break;
   case 3:
     personagemAtual = (personagem *)malloc(sizeof(personagem));
-    strcpy(personagemAtual->nome, "Personagem 3");
-    personagemAtual->hp = 120;
-    personagemAtual->ataque = 25;
-    personagemAtual->pm = 40;
+    strcpy(personagemAtual->nome, head->prox->prox->nome);
+    personagemAtual->hp = head->prox->prox->hp;
+    personagemAtual->ataque = head->prox->prox->ataque;
+    personagemAtual->pm = head->prox->prox->pm;
     personagemAtual->prox = NULL;
     break;
   default:
@@ -254,8 +254,8 @@ void liberarMemoriaI(inimigo *head) {
   }
 }
 
-inimigo *buscarI(inimigo *head, int id) {
-  inimigo *temp = head;
+inimigo *buscarI(inimigo *headI, int id) {
+  inimigo *temp = headI;
   while (temp != NULL) {
     if (temp->id == id) {
       return temp;

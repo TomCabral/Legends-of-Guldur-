@@ -36,11 +36,11 @@ void ataqueMagico(personagem *personagemAtual, inimigo *inimigoAtual);
 void defesa(personagem *personagemAtual, inimigo *inimigoAtual);
 void removerP(personagem **head, char nome[50]);
 void removerI(inimigo **headI, int id);
-personagem *escolherPersonagem(int escolha);
+personagem *escolherPersonagem(int escolha, personagem *head);
 void insertionSort(int arr[], int n);
 void liberarMemoriaH(personagem *head);
-void liberarMemoriaI(inimigo *head);
-inimigo *buscarI(inimigo *head, int id);
+void liberarMemoriaI(inimigo *headI);
+inimigo *buscarI(inimigo *headI, int id);
 inimigo *escolherInimigoAleatorio(inimigo *headI);
 
 #endif // LIB_H

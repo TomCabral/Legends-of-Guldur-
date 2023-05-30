@@ -13,7 +13,7 @@ int main() {
 
   // Declaração dos personagens
   inserirH(&head, 140, 55, 100, "Guerreiro Infernal");
-  inserirH(&head, 100000, 1000000, 160, "Mago de Gelo");
+  inserirH(&head, 4777770, 1000000, 160, "Mago de Gelo");
   inserirH(&head, 110, 40, 114, "Arqueira florestal");
 
   // Declaração dos inimigos
@@ -65,10 +65,10 @@ int main() {
     }
   } while (aux);
   printf("\nPersonagem escolhido: %s\n", personagemAtual->nome);
-
-  inimigo * inimigosBatalhados[MAX_INIMIGOS] = {};
+  int ids[MAX_INIMIGOS];
+  char inimigosBatalhados[MAX_INIMIGOS][50];
   int numInimigosBatalhados = 0;
-
+  printf("inimigo atual: %s", inimigoAtual->nome);
   do {
     printf("\nOpções de ação:\n");
     printf("1. Atacar\n");
@@ -87,7 +87,9 @@ int main() {
         if (confirmacao == 1) {
           ataque(personagemAtual, inimigoAtual);
           if (inimigoAtual->hp <= 0) {
-            inimigosBatalhados[numInimigosBatalhados] = inimigoAtual;
+            ids[numInimigosBatalhados] = inimigoAtual->id;
+            strcpy(inimigosBatalhados[ids[numInimigosBatalhados] - 1],
+                   inimigoAtual->nome);
             numInimigosBatalhados++;
             removerI(&headI, inimigoAtual->id);
             inimigoAtual = escolherInimigoAleatorio(headI);
@@ -114,7 +116,10 @@ int main() {
         if (confirmacao == 1) {
           ataqueMagico(personagemAtual, inimigoAtual);
           if (inimigoAtual->hp <= 0) {
-            inimigosBatalhados[numInimigosBatalhados] = inimigoAtual;
+            // eu sou um monstro em C
+            ids[numInimigosBatalhados] = inimigoAtual->id;
+            strcpy(inimigosBatalhados[ids[numInimigosBatalhados]],
+                   inimigoAtual->nome);
             numInimigosBatalhados++;
             removerI(&headI, inimigoAtual->id);
             if (headI != NULL) {
@@ -164,11 +169,15 @@ int main() {
   } else {
     printf("\nParabéns! Você derrotou todos os inimigos. Fim de jogo.\n");
   }
-
-  printf("\nLista de inimigos vencidos:\n");
-  for (int i = 0; i < numInimigosBatalhados; i++) {
-    inimigo *inimigoPrint = inimigosBatalhados[i];
-    printf("%d. %s\n", i + 1, inimigoPrint->nome);
+  insertionSort(ids, numInimigosBatalhados);
+  if (numInimigosBatalhados == 0) {
+    printf("Nenhum inimigo foi vencido.\n");
+  } else {
+    printf("\nLista de inimigos vencidos:\n");
+    insertionSort(ids, numInimigosBatalhados);
+    for (int i = 0; i < numInimigosBatalhados; i++) {
+      printf("%d. %s\n", i + 1, inimigosBatalhados[ids[i] - 1]);
+    }
   }
 
   liberarMemoriaH(head);

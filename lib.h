@@ -40,7 +40,6 @@ personagem *escolherPersonagem(int escolha, personagem *head);
 void insertionSort(int arr[], int n);
 void liberarMemoriaH(personagem *head);
 void liberarMemoriaI(inimigo *headI);
-inimigo *buscarI(inimigo *headI, int id);
 inimigo *escolherInimigoAleatorio(inimigo *headI);
 
 #endif // LIB_H

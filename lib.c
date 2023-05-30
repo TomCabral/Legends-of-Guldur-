@@ -254,17 +254,6 @@ void liberarMemoriaI(inimigo *head) {
   }
 }
 
-inimigo *buscarI(inimigo *headI, int id) {
-  inimigo *temp = headI;
-  while (temp != NULL) {
-    if (temp->id == id) {
-      return temp;
-    }
-    temp = temp->proxI;
-  }
-  return NULL;
-}
-
 inimigo *escolherInimigoAleatorio(inimigo *headI) {
   int count = 0;
   inimigo *tempI = headI;

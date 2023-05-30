@@ -12,16 +12,16 @@ int main() {
   inimigo *headI = NULL;
 
   // Declaração dos personagens
-  inserirH(&head, 140, 55, 100, "Guerreiro Infernal");
-  inserirH(&head, 4777770, 1000000, 160, "Mago de Gelo");
-  inserirH(&head, 110, 40, 114, "Arqueira florestal");
+  inserirH(&head, 500, 55, 100, "Guerreiro Infernal");
+  inserirH(&head, 340, 32, 200, "Mago de Gelo");
+  inserirH(&head, 450, 40, 114, "Arqueira florestal");
 
   // Declaração dos inimigos
   inserirI(&headI, 140, 4, 15, 1, "Lamina das Sombras");
   inserirI(&headI, 100, 8, 12, 2, "Cavaleiro Espectral");
   inserirI(&headI, 170, 6, 20, 3, "Servo do Abismo");
   inserirI(&headI, 200, 24, 40, 4, "Arauto do Crepúsculo");
-  inserirI(&headI, 400, 2, 6, 5, "Guardião das Trevas");
+  inserirI(&headI, 320, 2, 6, 5, "Guardião das Trevas");
   inserirI(&headI, 220, 24, 17, 6, "Artorias");
   inserirI(&headI, 230, 27, 16, 7, "Espreitador sombrio");
   inserirI(&headI, 240, 26, 18, 8, "Legião ardente");
@@ -116,7 +116,7 @@ int main() {
         if (confirmacao == 1) {
           ataqueMagico(personagemAtual, inimigoAtual);
           if (inimigoAtual->hp <= 0) {
-            // eu sou um monstro em C
+            // eu sou o monstro de C
             ids[numInimigosBatalhados] = inimigoAtual->id;
             strcpy(inimigosBatalhados[ids[numInimigosBatalhados]],
                    inimigoAtual->nome);
